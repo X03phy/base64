@@ -27,8 +27,7 @@ void base64_encode( const uint8_t *data, size_t len, uint8_t *ciphertext )
 			break;
 		}
 
-		ciphertext[ciphertext_index++] = BASE64_TABLE[( ( ( data[data_index] & 0x3 ) << 4 ) |
-														( ( data[data_index + 1] & 0xF0 ) >> 4 ) |
+		ciphertext[ciphertext_index++] = BASE64_TABLE[( ( ( data[data_index + 1] & 0xF ) << 2 ) |
 														( ( data[data_index + 2] & 0xC0 ) >> 6 ) )];
 		ciphertext[ciphertext_index++] = BASE64_TABLE[( data[data_index + 2] & 0x3F )];
 		data_index += 3;
