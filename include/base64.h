@@ -9,6 +9,8 @@
 
 static const char BASE64_TABLE[64] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-void base64_encode( const uint8_t *text, size_t len, uint8_t *ciphertext );
+void base64_encode( const uint8_t *plaintext, size_t len, uint8_t *ciphertext );
+void base64_decode( const uint8_t *ciphertext, size_t len, uint8_t *plaintext );
+
 
 #endif
