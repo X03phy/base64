@@ -1,12 +1,9 @@
-#include "sha256.h"
-
-/* For SHA256() */
-#include <openssl/sha.h>
+#include "base64.h"
 
 /* For printf() */
 #include <stdio.h>
 
-/* For memcmp() */
+/* For memcmp(), strlen() */
 #include <string.h>
 
 int main( int argc, char **argv )
@@ -17,22 +14,21 @@ int main( int argc, char **argv )
 		return ( 1 );
 	}
 
-	unsigned char hash[32];
-	unsigned char my_hash[32];
+	size_t len = strlen( argv[1] );
+	size_t ciphertext_length = 4 * ( ( len + 2 ) / 3 ); // Plus grand de 1 ou 2 octets
 
-	SHA256( ( const unsigned char * ) argv[1], strlen( argv[1] ), hash );
-	printf( "openssl SHA256: " );
-	for ( uint8_t i = 0; i < 32; ++i )
-		printf( "%02x", hash[i] );
-	printf( "\n" );
+	uint8_t plaintext[len];
+	uint8_t ciphertext[ciphertext_length];
 
-	sha256( ( const unsigned char * ) argv[1], strlen(argv[1]), my_hash );
-	printf( "my SHA256:      " );
-	for ( uint8_t i = 0; i < 32; ++i )
-		printf( "%02x", my_hash[i] );
-	printf("\n");
+	printf( "Original:   %s\n", argv[1] );
+	base64_encode( ( const uint8_t * ) argv[1], len, ciphertext );
 
-	if ( !memcmp( ( const char * ) hash, ( const char * ) my_hash, 32 ) )
+	printf( "Ciphertext: %s\n", ciphertext );
+
+	base64_decode( ciphertext, ciphertext_length, plaintext );
+	printf( "Plaintext:  %s\n", plaintext );
+
+	if ( !memcmp( argv[1], plaintext, len ) )
 		printf( "OK\n" );
 	else
 		printf( "KO\n" );
